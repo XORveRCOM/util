@@ -45,18 +45,18 @@ func TestEasyWork(t *testing.T) {
 
 	// 全ての結果を参照
 	for n, w := range eg.Results() {
-		if w.result != nil {
-			if w.result != testPanic {
+		if w.Result != nil {
+			if w.Result != testPanic {
 				t.Fail()
 			}
-			t.Logf("[%d] inst:%v result:%s", n, w.instance, w.result)
+			t.Logf("[%d] inst:%v result:%s", n, w.Instance, w.Result)
 		} else {
-			t.Logf("[%d] inst:%v success", n, w.instance)
+			t.Logf("[%d] inst:%v success", n, w.Instance)
 		}
 	}
 	// panic 終了した結果を参照
 	for n, w := range eg.Panics() {
-		t.Logf("[%d] inst:%v result:%s", n, w.instance, w.result)
+		t.Logf("[%d] inst:%v result:%s", n, w.Instance, w.Result)
 	}
 
 	// コーディングミスの検知

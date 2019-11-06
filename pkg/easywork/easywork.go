@@ -26,9 +26,9 @@ type WaitGroup interface {
 // Work は一つの仕事(Runnable)を格納します。
 type Work struct {
 	// Runnable の格納用
-	instance Runnable
+	Instance Runnable
 	// recover() の結果
-	result interface{}
+	Result interface{}
 }
 
 // easyWait は sync.WaitGroup のラッパーです。
@@ -63,12 +63,12 @@ func (eg *easyWait) Start(ew Runnable) {
 
 	// sync.WaitGroup に登録
 	eg.wg.Add(1)
-	wk := &Work{instance: ew}
+	wk := &Work{Instance: ew}
 	eg.works = append(eg.works, wk)
 	go func(wk *Work) {
 		defer func(wk *Work) {
 			// panic() の捕捉
-			wk.result = recover()
+			wk.Result = recover()
 			// 完了
 			eg.wg.Done()
 		}(wk)
@@ -108,7 +108,7 @@ func (eg *easyWait) Panics() []*Work {
 
 	res := []*Work{}
 	for _, w := range eg.works {
-		if w.result != nil {
+		if w.Result != nil {
 			res = append(res, w)
 		}
 	}
