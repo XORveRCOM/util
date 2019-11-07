@@ -1,4 +1,7 @@
 // Package easywork は行うべき仕事のサポートを主眼とした sync.WaitGroup のラッパーです。
+// sync.WaitGroup の操作は本来のロジックとは関係ありません。
+// easywork は sync.WaitGroup の操作とユーザロジックを分離します。
+// ユーザロジックは Running インタフェースとして実装してください。
 package easywork
 
 import (
@@ -7,7 +10,7 @@ import (
 
 // Runnable は非同期実行する仕事です。
 type Runnable interface {
-	// Run にはビジネスロジックを実装します。
+	// Run にはユーザロジックを実装します。
 	Run()
 }
 
@@ -72,7 +75,7 @@ func (eg *easyWait) Start(ew Runnable) {
 			// 完了
 			eg.wg.Done()
 		}(wk)
-		// 仕事のビジネスロジックの実行
+		// 仕事のユーザロジックの実行
 		ew.Run()
 	}(wk)
 }

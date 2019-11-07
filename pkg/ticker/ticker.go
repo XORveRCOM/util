@@ -1,6 +1,10 @@
 // Package ticker は周期実行作業を実現します。
 // sync.Ticker では Stop() で停止しようとしても周期的なチャネル送信を止めるだけなので、goroutine は停止せずにリークします。
-// 周期のタイミングでのチャネルからの受信などは Ticker の内部で実装され、周期と周期実行のロジックだけを Logic として指定します。
+// ticker は周期のタイミングでのチャネルからの受信などをユーザロジックと分離し、Stop() を拡張して goroutine も停止させます。
+// ユーザロジックは Logic インタフェースとして実装してください。
+// ユーザロジックは最初に Before() が、一回の周期ごとに Run() が、Stop() された時に After() が呼び出されます。
+// ユーザロジックで周期時間よりもかかった場合には、衝突した周期でのユーザロジックの呼び出しはキャンセルされます。
+// キャンセルですので次回の周期にはまた呼び出されます。
 package ticker
 
 import (
@@ -12,11 +16,11 @@ import (
 	"github.com/xorvercom/util/pkg/easywork"
 )
 
-// Logic は周期実行するビジネスロジックを規定します。
+// Logic は周期実行するユーザロジックを規定します。
 type Logic interface {
 	// 事前処理
 	Before()
-	// ビジネスロジック
+	// ユーザロジック
 	Run()
 	// 事後処理
 	After()
@@ -40,11 +44,11 @@ type tickerWork struct {
 	cancelCtx context.Context
 	// 停止関数
 	cancelFunc context.CancelFunc
-	// ビジネスロジック
+	// ユーザロジック
 	logic Logic
 }
 
-// 周期的にビジネスロジックを呼ぶ
+// 周期的にユーザロジックを呼ぶ
 func (w *tickerWork) Run() {
 	// 事前処理
 	func() {
@@ -63,7 +67,7 @@ func (w *tickerWork) Run() {
 		w.logic.After()
 	}()
 
-	// ビジネスロジックの実行中
+	// ユーザロジックの実行中
 	var mutex sync.Mutex
 	// 実行中フラグ。boolはbyteでアトミックだと思いたいけど、至る所でスレッドセーフではないと書かれているので。
 	running := int32(0)
@@ -74,7 +78,7 @@ func (w *tickerWork) Run() {
 		case <-w.cancelCtx.Done():
 			// <-w.ticker.C の停止要求
 			w.ticker.Stop()
-			// ビジネスロジックが実行中だった場合には終了を待つ
+			// ユーザロジックが実行中だった場合には終了を待つ
 			mutex.Lock()
 			mutex.Unlock()
 			return
@@ -87,13 +91,13 @@ func (w *tickerWork) Run() {
 			atomic.StoreInt32(&running, 1)
 			go func() {
 				defer func() {
-					// ビジネスロジックでのパニックは無視
-					// 捕捉したいならビジネスロジック側でrecover()する
+					// ユーザロジックでのパニックは無視
+					// 捕捉したいならユーザロジック側でrecover()する
 					_ = recover()
 					atomic.StoreInt32(&running, 0)
 					mutex.Unlock()
 				}()
-				// ビジネスロジック実行
+				// ユーザロジック実行
 				w.logic.Run()
 			}()
 		}
