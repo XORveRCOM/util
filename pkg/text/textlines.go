@@ -15,6 +15,8 @@ type TextLines interface {
 	Append(string)
 	// SaveTo はファイルにテキストを書き込みます。(LF,UTF-8)
 	SaveTo(string) error
+	// LoadFrom はファイルからテキストを読み込みます。
+	LoadFrom(string) error
 }
 
 // textLines はテキストを格納します。
@@ -32,10 +34,14 @@ func New() TextLines {
 // LoadFrom はファイルからテキストを読み込みます。
 func LoadFrom(filename string) (TextLines, error) {
 	t := &textLines{lines: []string{}}
+	return t, t.LoadFrom(filename)
+}
 
+// LoadFrom はファイルからテキストを読み込みます。
+func (t *textLines) LoadFrom(filename string) error {
 	f, err := os.Open(filename)
 	if err != nil {
-		return t, fmt.Errorf("os.Open(%s) return %v", filename, err)
+		return fmt.Errorf("os.Open(%s) return %v", filename, err)
 	}
 	defer f.Close()
 
@@ -47,7 +53,7 @@ func LoadFrom(filename string) (TextLines, error) {
 	if err != nil {
 		err = fmt.Errorf("scanner.Scan(%s) return %v", filename, err)
 	}
-	return t, err
+	return err
 }
 
 // Lines は文字列スライスを返します。

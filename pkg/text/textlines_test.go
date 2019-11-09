@@ -1,10 +1,40 @@
 package textlines
 
 import (
+	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 )
+
+func Example() {
+	filename := filepath.Join(os.TempDir(), "test.txt")
+
+	// 書き出し
+	write := New()
+	write.Append("abcd")
+	write.Append("0123")
+	if err := write.SaveTo(filename); err != nil {
+		panic("save error")
+	}
+
+	// 読み込み
+	// read, err := LoadFrom(filename) でも同じ挙動となります
+	read := New()
+	if err := read.LoadFrom(filename); err != nil {
+		panic("load error")
+	}
+
+	txt := read.Lines()
+	fmt.Println(len(txt))
+	fmt.Println(txt[0])
+	fmt.Println(txt[1])
+
+	// output:
+	// 2
+	// abcd
+	// 0123
+}
 
 func TestAll(t *testing.T) {
 	tempdir := os.TempDir()
@@ -12,7 +42,7 @@ func TestAll(t *testing.T) {
 	var err error
 	txt = New()
 
-	filename := path.Join(tempdir, "test.txt")
+	filename := filepath.Join(tempdir, "test.txt")
 	txt.Append("abcd")
 	txt.Append("0123")
 	if err = txt.SaveTo(filename); err != nil {

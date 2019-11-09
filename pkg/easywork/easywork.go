@@ -1,6 +1,6 @@
-// Package easywork は行うべき仕事のサポートを主眼とした sync.WaitGroup のラッパーです。
-// sync.WaitGroup の操作は本来のロジックとは関係ありません。
-// easywork は sync.WaitGroup の操作とユーザロジックを分離します。
+// Package easywork は sync.WaitGroup をラップしユーザロジックの実行を主眼として改善を行います。
+// sync.WaitGroup の操作は本来のユーザロジックとは関係のない作業が必要であり、その実装でのミスが想定されます。
+// easywork は sync.WaitGroup の操作とユーザロジックを分離し、実装ミスを防止します。
 // ユーザロジックは Running インタフェースとして実装してください。
 package easywork
 
