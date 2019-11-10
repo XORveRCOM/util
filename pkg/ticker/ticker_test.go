@@ -13,6 +13,39 @@ type worker struct {
 	sec int
 }
 
+type tick struct {
+	count  int
+	ticker Ticker
+}
+
+func (t *tick) Before() {
+	t.count = 0
+	fmt.Printf("start count:%d\n", t.count)
+}
+func (t *tick) Run() {
+	t.count++
+	fmt.Printf("tick count:%d\n", t.count)
+	if t.count > 2 {
+		t.ticker.Stop()
+	}
+}
+func (t *tick) After() {
+	fmt.Printf("done count:%d\n", t.count)
+}
+
+func Example() {
+	t := &tick{}
+	t.ticker = New()
+	t.ticker.Start(t, time.Duration(100)*time.Millisecond)
+	time.Sleep(time.Duration(1) * time.Second)
+	// Output:
+	// start count:0
+	// tick count:1
+	// tick count:2
+	// tick count:3
+	// done count:3
+}
+
 // ビジネスロジック
 func (w *worker) Before() {
 	fmt.Println("[事前処理]", w, time.Now())

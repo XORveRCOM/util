@@ -9,22 +9,10 @@ package ticker
 
 import (
 	"context"
-	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/xorvercom/util/pkg/easywork"
 )
-
-// Logic は周期実行するユーザロジックを規定します。
-type Logic interface {
-	// 事前処理
-	Before()
-	// ユーザロジック
-	Run()
-	// 事後処理
-	After()
-}
 
 // Ticker は周期実行作業をするためのインタフェースです。
 type Ticker interface {
@@ -34,74 +22,6 @@ type Ticker interface {
 	Start(Logic, time.Duration)
 	// Stop は定期実行処理を停止して、停止が確認されるまで待機します。
 	Stop()
-}
-
-// 周期実行作業
-type tickerWork struct {
-	// 周期
-	ticker *time.Ticker
-	// キャンセルcontext
-	cancelCtx context.Context
-	// 停止関数
-	cancelFunc context.CancelFunc
-	// ユーザロジック
-	logic Logic
-}
-
-// 周期的にユーザロジックを呼ぶ
-func (w *tickerWork) Run() {
-	// 事前処理
-	func() {
-		defer func() {
-			_ = recover()
-		}()
-		// 事前処理
-		w.logic.Before()
-	}()
-
-	// 事後処理
-	defer func() {
-		defer func() {
-			_ = recover()
-		}()
-		w.logic.After()
-	}()
-
-	// ユーザロジックの実行中
-	var mutex sync.Mutex
-	// 実行中フラグ。boolはbyteでアトミックだと思いたいけど、至る所でスレッドセーフではないと書かれているので。
-	running := int32(0)
-
-	// 周期処理
-	for {
-		select {
-		case <-w.cancelCtx.Done():
-			// <-w.ticker.C の停止要求
-			w.ticker.Stop()
-			// ユーザロジックが実行中だった場合には終了を待つ
-			mutex.Lock()
-			mutex.Unlock()
-			return
-		case <-w.ticker.C:
-			if atomic.LoadInt32(&running) != 0 {
-				// 実行中だったのでスキップ
-				continue
-			}
-			mutex.Lock()
-			atomic.StoreInt32(&running, 1)
-			go func() {
-				defer func() {
-					// ユーザロジックでのパニックは無視
-					// 捕捉したいならユーザロジック側でrecover()する
-					_ = recover()
-					atomic.StoreInt32(&running, 0)
-					mutex.Unlock()
-				}()
-				// ユーザロジック実行
-				w.logic.Run()
-			}()
-		}
-	}
 }
 
 // Ticker は time.Tick のラッパーです。
@@ -126,7 +46,7 @@ func New() Ticker {
 func (t *ticker) Start(tl Logic, d time.Duration) {
 	// ctx, _ := context.WithCancel(t.cancelCtx) だと go vet のバグなのかコンパイルエラーとなる
 	ctx, fnc := context.WithCancel(t.cancelCtx)
-	tw := &tickerWork{ticker: time.NewTicker(d), cancelCtx: ctx, cancelFunc: fnc, logic: tl}
+	tw := &tickerLogic{ticker: time.NewTicker(d), cancelCtx: ctx, cancelFunc: fnc, logic: tl}
 	// easywork.WaitGroup として起動
 	t.waitgroup.Start(tw)
 }
