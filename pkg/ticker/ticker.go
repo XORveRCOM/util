@@ -17,11 +17,14 @@ import (
 // Ticker は周期実行作業をするためのインタフェースです。
 type Ticker interface {
 	// Start は周期実行作業を開始します。
-	// TickerWork.Run は Duration の周期で定期的に呼ばれる goroutine ですので、長時間の作業は行わないでください。
+	// Logic.Run は Duration の周期で定期的に呼ばれる goroutine ですので、長時間の作業は行わないでください。
 	// Duration の周期に TickerWork.Run が完了していなければ、その周期での実行はスキップされます。
 	Start(Logic, time.Duration)
-	// Stop は定期実行処理を停止して、停止が確認されるまで待機します。
+	// Stop は定期実行処理を停止します。
 	Stop()
+	// Wait は周期実行の停止が確認されるまで待機します。
+	// Ticker が実行しているユーザロジックの中で呼び出すとデッドロックしますので注意してください。
+	Wait()
 }
 
 // Ticker は time.Tick のラッパーです。
@@ -42,7 +45,7 @@ func New() Ticker {
 	return &ticker{cancelCtx: ctx, cancelFunc: fnc, waitgroup: easywork.NewGroup()}
 }
 
-// 周期実行を追加
+// 周期実行を追加します。
 func (t *ticker) Start(tl Logic, d time.Duration) {
 	// ctx, _ := context.WithCancel(t.cancelCtx) だと go vet のバグなのかコンパイルエラーとなる
 	ctx, fnc := context.WithCancel(t.cancelCtx)
@@ -51,11 +54,16 @@ func (t *ticker) Start(tl Logic, d time.Duration) {
 	t.waitgroup.Start(tw)
 }
 
-// 周期実行を停止
+// 周期実行を停止します。
 func (t *ticker) Stop() {
 	t.cancelFunc()
 	// 念のため
 	_ = <-t.cancelCtx.Done()
+}
+
+// 周期実行の停止が確認されるまで待機します。
+// Ticker が実行しているユーザロジックの中で呼び出すとデッドロックしますので注意してください。
+func (t *ticker) Wait() {
 	// 終了待ち
 	t.waitgroup.Wait()
 }

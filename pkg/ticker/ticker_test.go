@@ -13,37 +13,48 @@ type worker struct {
 	sec int
 }
 
+// 周期実行（ユーザロジック）
 type tick struct {
-	count  int
+	// カウンタ
+	count int
+	// 停止用
 	ticker Ticker
 }
 
+// 事前処理（ユーザロジック）
 func (t *tick) Before() {
 	t.count = 0
-	fmt.Printf("start count:%d\n", t.count)
+	fmt.Printf("before count:%d\n", t.count)
 }
+
+// 周期実行処理（ユーザロジック）
 func (t *tick) Run() {
 	t.count++
-	fmt.Printf("tick count:%d\n", t.count)
+	fmt.Printf("run count:%d\n", t.count)
 	if t.count > 2 {
+		// 停止
 		t.ticker.Stop()
 	}
 }
+
+// 事後処理（ユーザロジック）
 func (t *tick) After() {
-	fmt.Printf("done count:%d\n", t.count)
+	fmt.Printf("after count:%d\n", t.count)
 }
 
 func Example() {
 	t := &tick{}
 	t.ticker = New()
 	t.ticker.Start(t, time.Duration(100)*time.Millisecond)
-	time.Sleep(time.Duration(1) * time.Second)
+	t.ticker.Wait()
+	fmt.Println("done")
 	// Output:
-	// start count:0
-	// tick count:1
-	// tick count:2
-	// tick count:3
-	// done count:3
+	// before count:0
+	// run count:1
+	// run count:2
+	// run count:3
+	// after count:3
+	// done
 }
 
 // ビジネスロジック
@@ -67,6 +78,7 @@ func (w *worker) String() string {
 func TestNew(t *testing.T) {
 	tick := New()
 	tick.Stop()
+	tick.Wait()
 	t.Log()
 }
 
@@ -79,6 +91,7 @@ func TestStart(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	fmt.Println("tickStop()", time.Now())
 	tick.Stop()
+	tick.Wait()
 	fmt.Println("exit", time.Now())
 	t.Log()
 }
