@@ -47,9 +47,12 @@ func New() Ticker {
 
 // 周期実行を追加します。
 func (t *ticker) Start(tl Logic, d time.Duration) {
-	// ctx, _ := context.WithCancel(t.cancelCtx) だと go vet のバグなのかコンパイルエラーとなる
+	// 親子関係があり t.cancelFunc によって子供の ctx もキャンセルされるため fnc は不要
+	// しかし ctx, _ := context.WithCancel(t.cancelCtx) だと go vet のバグでコンパイルエラーとなる
 	ctx, fnc := context.WithCancel(t.cancelCtx)
-	tw := &tickerLogic{ticker: time.NewTicker(d), cancelCtx: ctx, cancelFunc: fnc, logic: tl}
+	// https://github.com/golang/go/issues/29587 での回避策
+	_ = fnc
+	tw := &tickerLogic{ticker: time.NewTicker(d), cancelCtx: ctx, logic: tl}
 	// easywork.WaitGroup として起動
 	t.waitgroup.Start(tw)
 }

@@ -23,8 +23,6 @@ type tickerLogic struct {
 	ticker *time.Ticker
 	// キャンセルcontext
 	cancelCtx context.Context
-	// 停止関数
-	cancelFunc context.CancelFunc
 	// ユーザロジック
 	logic Logic
 }

@@ -3,11 +3,23 @@
 package calledcheck
 
 import (
+	"fmt"
 	"runtime"
 )
 
 // FunctionID は関数を示す識別コードです。
 type FunctionID string
+
+// CalledPC は呼び出し元を示す識別コードです。
+type CalledPC uintptr
+
+// String はstringerです。
+func (c CalledPC) String() string {
+	pc := uintptr(c)
+	fpc := runtime.FuncForPC(pc)
+	n, l := fpc.FileLine(pc)
+	return fmt.Sprintf("%s (%s:%d)", fpc.Name(), n, l)
+}
 
 // CalledByFID はスタックトレース上に FunctionID があるかを検査します。
 func CalledByFID(fid FunctionID) bool {
@@ -26,11 +38,12 @@ func CalledByFID(fid FunctionID) bool {
 }
 
 // CalledByPC はスタックトレース上に pc があるかを検査します。
-func CalledByPC(pc uintptr) bool {
+func CalledByPC(pc CalledPC) bool {
+	ppc := uintptr(pc)
 	i := 1
 	for {
 		if cpc, _, _, ok := runtime.Caller(i); ok {
-			if pc == cpc {
+			if ppc == cpc {
 				return true
 			}
 		} else {
@@ -53,7 +66,7 @@ func GetFunctionID() FunctionID {
 }
 
 // GetCallerPC はそれを呼び出した関数の呼び出し元の PC を取得します。
-func GetCallerPC() uintptr {
+func GetCallerPC() CalledPC {
 	pc, _, _, _ := runtime.Caller(2)
-	return pc
+	return CalledPC(pc)
 }

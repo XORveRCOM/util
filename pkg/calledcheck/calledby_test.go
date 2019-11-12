@@ -18,11 +18,12 @@ func TestCalledByFID(t *testing.T) {
 
 func TestCalledByPC(t *testing.T) {
 	pc := GetCallerPC()
+	t.Log(pc)
 	func() {
 		if !CalledByPC(pc) {
 			t.Error("calledby error")
 		}
-		if CalledByPC(uintptr(0)) {
+		if CalledByPC(CalledPC(0)) {
 			t.Error("calledby error")
 		}
 	}()
