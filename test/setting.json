@@ -1,0 +1,7 @@
+{
+    "zipfile": "test/websample-doc.zip",
+    "num": 1,
+    "sarr": ["1", "2"],
+    "iarr": [1, 2],
+    "arr": [{"i":"1"}, {"i":"2"}]
+}

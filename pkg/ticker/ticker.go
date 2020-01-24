@@ -61,7 +61,7 @@ func (t *ticker) Start(tl Logic, d time.Duration) {
 func (t *ticker) Stop() {
 	t.cancelFunc()
 	// 念のため
-	_ = <-t.cancelCtx.Done()
+	_ = <-t.cancelCtx.Done() // nolint:gosimple
 }
 
 // 周期実行の停止が確認されるまで待機します。
