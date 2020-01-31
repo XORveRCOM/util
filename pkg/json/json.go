@@ -29,7 +29,7 @@ func ToJSON(elem Element, indentation bool) string {
 	b, _ := libjson.Marshal(elem.Value())
 	if indentation {
 		var out bytes.Buffer
-		libjson.Indent(&out, b, "", "    ")
+		libjson.Indent(&out, b, "", "    ") // nolint
 		return out.String()
 	}
 	return elem.String()

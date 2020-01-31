@@ -9,7 +9,7 @@ import (
 
 func TestElement(t *testing.T) {
 	temp := fpath.Join(os.TempDir(), "config_test")
-	os.MkdirAll(temp, os.ModeDir)
+	os.MkdirAll(temp, os.ModeDir) // nolint
 	defer os.RemoveAll(temp)
 	elem := NewElemObject()
 	aelem := NewElemArray()
@@ -64,8 +64,12 @@ func TestElementBool(t *testing.T) {
 func TestAs(t *testing.T) {
 	var elem Element
 	elem = NewElemObject()
-	if _, ok := elem.AsObject(); false == ok {
+	if e, ok := elem.AsObject(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 	if _, ok := elem.AsArray(); ok {
 		t.Failed()
@@ -84,8 +88,12 @@ func TestAs(t *testing.T) {
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
-	if _, ok := elem.AsArray(); false == ok {
+	if e, ok := elem.AsArray(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 	if _, ok := elem.AsString(); ok {
 		t.Failed()
@@ -104,8 +112,12 @@ func TestAs(t *testing.T) {
 	if _, ok := elem.AsArray(); ok {
 		t.Failed()
 	}
-	if _, ok := elem.AsString(); false == ok {
+	if e, ok := elem.AsString(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 	if _, ok := elem.AsFloat(); ok {
 		t.Failed()
@@ -124,8 +136,12 @@ func TestAs(t *testing.T) {
 	if _, ok := elem.AsString(); ok {
 		t.Failed()
 	}
-	if _, ok := elem.AsFloat(); false == ok {
+	if e, ok := elem.AsFloat(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 	if _, ok := elem.AsBool(); ok {
 		t.Failed()
@@ -144,8 +160,12 @@ func TestAs(t *testing.T) {
 	if _, ok := elem.AsFloat(); ok {
 		t.Failed()
 	}
-	if _, ok := elem.AsBool(); false == ok {
+	if e, ok := elem.AsBool(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 
 	elem = NewElemNull()
@@ -161,8 +181,12 @@ func TestAs(t *testing.T) {
 	if _, ok := elem.AsFloat(); ok {
 		t.Failed()
 	}
-	if _, ok := elem.AsBool(); false == ok {
+	if e, ok := elem.AsBool(); false == ok {
 		t.Failed()
+	} else {
+		if e.String() == "" {
+			t.Failed()
+		}
 	}
 
 }
