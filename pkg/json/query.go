@@ -20,7 +20,7 @@ func Query(root Element, query PathJSON) Element {
 				return NewElemNull()
 			}
 			switch val := cur.(type) {
-			case *ElemArray:
+			case ElemArray:
 				cur = val.Child(num)
 			default:
 				return NewElemNull()
@@ -28,7 +28,7 @@ func Query(root Element, query PathJSON) Element {
 		} else {
 			// オブジェクト
 			switch val := cur.(type) {
-			case *ElemObject:
+			case ElemObject:
 				cur = val.Child(elem)
 			default:
 				return NewElemNull()

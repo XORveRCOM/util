@@ -24,7 +24,7 @@ func TestPath(t *testing.T) {
 	s := JoinJSONPath([]string{})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		null := v.Value()
 		if null != nil {
 			t.Fatal(v.Type())
@@ -51,7 +51,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{""})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -62,7 +62,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"notexist"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -73,7 +73,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"[0]"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -84,7 +84,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"arr", "object"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -95,7 +95,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"arr", "[2]"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -106,7 +106,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"arr", "[-1]"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}
@@ -117,7 +117,7 @@ func TestPath(t *testing.T) {
 	s = JoinJSONPath([]string{"arr", "[string]"})
 	target = Query(elem, s)
 	switch v := target.(type) {
-	case *ElemNull:
+	case ElemNull:
 		if target.Type() != TypeNull {
 			t.Fatal(target.Type())
 		}

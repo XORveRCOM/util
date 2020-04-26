@@ -8,18 +8,18 @@ type Element interface {
 	Text() string
 	// Type は要素の種類を取得します。
 	Type() ElementType
-	// Paths は要素の一覧を取得します。
+	// Paths は子供のパス要素の一覧を取得します。
 	Paths() []PathJSON
 	// Value はインタフェースとしての内容を取得します。
 	Value() interface{}
 	// AsObject は ElemObject にキャストします。
-	AsObject() (*ElemObject, bool)
+	AsObject() (ElemObject, bool)
 	// AsArray は ElemArray にキャストします。
-	AsArray() (*ElemArray, bool)
+	AsArray() (ElemArray, bool)
 	// AsString は ElemString にキャストします。
-	AsString() (*ElemString, bool)
+	AsString() (ElemString, bool)
 	// AsFloat は ElemFloat にキャストします。
-	AsFloat() (*ElemFloat, bool)
+	AsFloat() (ElemFloat, bool)
 	// AsBool は ElemBool にキャストします。
-	AsBool() (*ElemBool, bool)
+	AsBool() (ElemBool, bool)
 }

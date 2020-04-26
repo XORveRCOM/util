@@ -1,58 +1,62 @@
 package json
 
+type ElemNull interface {
+	Element
+}
+
 // ElemNull はNULL値型要素です
-type ElemNull struct{}
+type elemNull struct{}
 
 // NewElemNull は要素を作成します。
-func NewElemNull() *ElemNull {
-	return &ElemNull{}
+func NewElemNull() ElemNull {
+	return &elemNull{}
 }
 
-// Value はインタフェースとしての内容を取得します。
-func (e *ElemNull) Value() interface{} {
-	return nil
-}
-
-// Paths は要素の一覧を取得します。
-func (e *ElemNull) Paths() []PathJSON {
-	return []PathJSON{}
+func (e *elemNull) String() string {
+	return e.Text()
 }
 
 // Type は要素の型を取得します。
-func (e *ElemNull) Type() ElementType {
+func (e *elemNull) Type() ElementType {
 	return TypeNull
 }
 
+// Paths は子供のパス要素の一覧を取得します。
+func (e *elemNull) Paths() []PathJSON {
+	return []PathJSON{}
+}
+
+// Value はインタフェースとしての内容を取得します。
+func (e *elemNull) Value() interface{} {
+	return nil
+}
+
 // Text は文字列表現を返します。
-func (e *ElemNull) Text() string {
+func (e *elemNull) Text() string {
 	return "null"
 }
 
 // AsObject は ElemObject にキャストします。
-func (e *ElemNull) AsObject() (*ElemObject, bool) {
+func (e *elemNull) AsObject() (ElemObject, bool) {
 	return nil, false
 }
 
 // AsArray は ElemArray にキャストします。
-func (e *ElemNull) AsArray() (*ElemArray, bool) {
+func (e *elemNull) AsArray() (ElemArray, bool) {
 	return nil, false
 }
 
 // AsString は ElemString にキャストします。
-func (e *ElemNull) AsString() (*ElemString, bool) {
+func (e *elemNull) AsString() (ElemString, bool) {
 	return nil, false
 }
 
 // AsFloat は ElemFloat にキャストします。
-func (e *ElemNull) AsFloat() (*ElemFloat, bool) {
+func (e *elemNull) AsFloat() (ElemFloat, bool) {
 	return nil, false
 }
 
 // AsBool は ElemBool にキャストします。
-func (e *ElemNull) AsBool() (*ElemBool, bool) {
+func (e *elemNull) AsBool() (ElemBool, bool) {
 	return nil, false
-}
-
-func (e ElemNull) String() string {
-	return e.Text()
 }

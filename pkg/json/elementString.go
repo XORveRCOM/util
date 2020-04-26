@@ -1,60 +1,71 @@
 package json
 
+type ElemString interface {
+	Element
+	// Length は文字列長を返します。
+	Length() int
+}
+
 // ElemString は文字列型要素です
-type ElemString struct {
+type _ElemString struct {
 	value string
 }
 
 // NewElemString は要素を作成します。
-func NewElemString(value string) *ElemString {
-	return &ElemString{value: value}
+func NewElemString(value string) ElemString {
+	return &_ElemString{value: value}
 }
 
-// Value はインタフェースとしての内容を取得します。
-func (e *ElemString) Value() interface{} {
-	return e.value
-}
-
-// Paths は要素の一覧を取得します。
-func (e *ElemString) Paths() []PathJSON {
-	return []PathJSON{}
-}
-
-// Type は要素の型を取得します。
-func (e *ElemString) Type() ElementType {
-	return TypeString
+func (e *_ElemString) String() string {
+	return "\"" + e.Text() + "\""
 }
 
 // Text は文字列表現を返します。
-func (e *ElemString) Text() string {
+func (e *_ElemString) Text() string {
+	return e.value
+}
+
+// Type は要素の型を取得します。
+func (e *_ElemString) Type() ElementType {
+	return TypeString
+}
+
+// Paths は子供のパス要素の一覧を取得します。
+func (e *_ElemString) Paths() []PathJSON {
+	return []PathJSON{}
+}
+
+// Value はインタフェースとしての内容を取得します。
+func (e *_ElemString) Value() interface{} {
 	return e.value
 }
 
 // AsObject は ElemObject にキャストします。
-func (e *ElemString) AsObject() (*ElemObject, bool) {
+func (e *_ElemString) AsObject() (ElemObject, bool) {
 	return nil, false
 }
 
 // AsArray は ElemArray にキャストします。
-func (e *ElemString) AsArray() (*ElemArray, bool) {
+func (e *_ElemString) AsArray() (ElemArray, bool) {
 	return nil, false
 }
 
 // AsString は ElemString にキャストします。
-func (e *ElemString) AsString() (*ElemString, bool) {
+func (e *_ElemString) AsString() (ElemString, bool) {
 	return e, true
 }
 
 // AsFloat は ElemFloat にキャストします。
-func (e *ElemString) AsFloat() (*ElemFloat, bool) {
+func (e *_ElemString) AsFloat() (ElemFloat, bool) {
 	return nil, false
 }
 
 // AsBool は ElemBool にキャストします。
-func (e *ElemString) AsBool() (*ElemBool, bool) {
+func (e *_ElemString) AsBool() (ElemBool, bool) {
 	return nil, false
 }
 
-func (e ElemString) String() string {
-	return "\"" + e.Text() + "\""
+// Length は文字列長を返します。
+func (e *_ElemString) Length() int {
+	return len(e.value)
 }

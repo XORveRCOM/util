@@ -61,6 +61,80 @@ func TestElementBool(t *testing.T) {
 	}
 }
 
+func TestPaths(t *testing.T) {
+	var elem Element
+	var paths []PathJSON
+
+	elem = NewElemObject()
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+
+	elem = NewElemArray()
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+
+	elem = NewElemBool(true)
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+
+	elem = NewElemFloat(0)
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+
+	elem = NewElemNull()
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+
+	elem = NewElemString("")
+	paths = elem.Paths()
+	if len(paths) != 0 {
+		t.Failed()
+	}
+}
+
+func TestType(t *testing.T) {
+	var elem Element
+
+	elem = NewElemObject()
+	if elem.Type() != TypeObject {
+		t.Failed()
+	}
+
+	elem = NewElemArray()
+	if elem.Type() != TypeArray {
+		t.Failed()
+	}
+
+	elem = NewElemBool(true)
+	if elem.Type() != TypeBool {
+		t.Failed()
+	}
+
+	elem = NewElemFloat(0)
+	if elem.Type() != TypeFloat {
+		t.Failed()
+	}
+
+	elem = NewElemNull()
+	if elem.Type() != TypeNull {
+		t.Failed()
+	}
+
+	elem = NewElemString("")
+	if elem.Type() != TypeString {
+		t.Failed()
+	}
+}
 func TestAs(t *testing.T) {
 	var elem Element
 	elem = NewElemObject()
@@ -188,5 +262,21 @@ func TestAs(t *testing.T) {
 			t.Failed()
 		}
 	}
+}
 
+func TestLength(t *testing.T) {
+	var elem ElemString
+	var str string
+
+	str = ""
+	elem = NewElemString(str)
+	if elem.Length() != len(str) {
+		t.Failed()
+	}
+
+	str = "1234"
+	elem = NewElemString(str)
+	if elem.Length() != len(str) {
+		t.Failed()
+	}
 }
