@@ -13,7 +13,7 @@ type elemBool struct {
 	value bool
 }
 
-// NewelemBool は要素を作成します。
+// NewElemBool は要素を作成します。
 func NewElemBool(value bool) *elemBool {
 	return &elemBool{value: value}
 }
