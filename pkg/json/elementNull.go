@@ -60,3 +60,33 @@ func (e *elemNull) AsFloat() (ElemFloat, bool) {
 func (e *elemNull) AsBool() (ElemBool, bool) {
 	return nil, false
 }
+
+// IsObject は ElemObject であるか判定します。
+func (e *elemNull) IsObject() bool {
+	return false
+}
+
+// IsArray は ElemArray であるか判定します。
+func (e *elemNull) IsArray() bool {
+	return false
+}
+
+// AsString は ElemString であるか判定します。
+func (e *elemNull) IsString() bool {
+	return false
+}
+
+// IsFloat は ElemFloat であるか判定します。
+func (e *elemNull) IsFloat() bool {
+	return false
+}
+
+// IsBool は ElemBool であるか判定します。
+func (e *elemNull) IsBool() bool {
+	return false
+}
+
+// IsNull は ElemNull であるか判定します。
+func (e *elemNull) IsNull() bool {
+	return true
+}

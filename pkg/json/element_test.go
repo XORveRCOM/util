@@ -137,6 +137,7 @@ func TestType(t *testing.T) {
 }
 func TestAs(t *testing.T) {
 	var elem Element
+
 	elem = NewElemObject()
 	if e, ok := elem.AsObject(); false == ok {
 		t.Failed()
@@ -261,6 +262,148 @@ func TestAs(t *testing.T) {
 		if e.String() == "" {
 			t.Failed()
 		}
+	}
+}
+
+func TestIs(t *testing.T) {
+	var elem Element
+
+	elem = NewElemObject()
+	if false == elem.IsObject() {
+		t.Failed()
+	}
+	if elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsFloat() {
+		t.Failed()
+	}
+	if elem.IsBool() {
+		t.Failed()
+	}
+	if elem.IsNull() {
+		t.Failed()
+	}
+
+	elem = NewElemArray()
+	if elem.IsObject() {
+		t.Failed()
+	}
+	if false == elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsFloat() {
+		t.Failed()
+	}
+	if elem.IsBool() {
+		t.Failed()
+	}
+	if elem.IsNull() {
+		t.Failed()
+	}
+
+	elem = NewElemString("")
+	if elem.IsObject() {
+		t.Failed()
+	}
+	if elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if false == elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsFloat() {
+		t.Failed()
+	}
+	if elem.IsBool() {
+		t.Failed()
+	}
+	if elem.IsNull() {
+		t.Failed()
+	}
+
+	elem = NewElemFloat(1)
+	if elem.IsObject() {
+		t.Failed()
+	}
+	if elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if false == elem.IsFloat() {
+		t.Failed()
+	}
+	if elem.IsBool() {
+		t.Failed()
+	}
+	if elem.IsNull() {
+		t.Failed()
+	}
+
+	elem = NewElemBool(true)
+	if elem.IsObject() {
+		t.Failed()
+	}
+	if elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsFloat() {
+		t.Failed()
+	}
+	if false == elem.IsBool() {
+		t.Failed()
+	}
+	if elem.IsNull() {
+		t.Failed()
+	}
+
+	elem = NewElemNull()
+	if elem.IsObject() {
+		t.Failed()
+	}
+	if elem.IsArray() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsString() {
+		t.Failed()
+	}
+	if elem.IsFloat() {
+		t.Failed()
+	}
+	if elem.IsBool() {
+		t.Failed()
+	}
+	if false == elem.IsNull() {
+		t.Failed()
 	}
 }
 

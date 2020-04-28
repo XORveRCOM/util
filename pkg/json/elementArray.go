@@ -95,6 +95,36 @@ func (e *elemArray) AsBool() (ElemBool, bool) {
 	return nil, false
 }
 
+// IsObject は ElemObject であるか判定します。
+func (e *elemArray) IsObject() bool {
+	return false
+}
+
+// IsArray は ElemArray であるか判定します。
+func (e *elemArray) IsArray() bool {
+	return true
+}
+
+// AsString は ElemString であるか判定します。
+func (e *elemArray) IsString() bool {
+	return false
+}
+
+// IsFloat は ElemFloat であるか判定します。
+func (e *elemArray) IsFloat() bool {
+	return false
+}
+
+// IsBool は ElemBool であるか判定します。
+func (e *elemArray) IsBool() bool {
+	return false
+}
+
+// IsNull は ElemNull であるか判定します。
+func (e *elemArray) IsNull() bool {
+	return true
+}
+
 // Size は子供の数を返します。
 func (e *elemArray) Size() int {
 	return len(e.value)
