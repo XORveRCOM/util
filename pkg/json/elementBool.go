@@ -10,6 +10,7 @@ type ElemBool interface {
 
 // elemBool は論理値型要素です
 type elemBool struct {
+	element
 	value bool
 }
 
@@ -42,58 +43,13 @@ func (e *elemBool) Value() interface{} {
 	return e.value
 }
 
-// AsObject は ElemObject にキャストします。
-func (e *elemBool) AsObject() (ElemObject, bool) {
-	return nil, false
-}
-
-// AsArray は ElemArray にキャストします。
-func (e *elemBool) AsArray() (ElemArray, bool) {
-	return nil, false
-}
-
-// AsString は ElemString にキャストします。
-func (e *elemBool) AsString() (ElemString, bool) {
-	return nil, false
-}
-
-// AsFloat は ElemFloat にキャストします。
-func (e *elemBool) AsFloat() (ElemFloat, bool) {
-	return nil, false
-}
-
 // AsBool は elemBool にキャストします。
 func (e *elemBool) AsBool() (ElemBool, bool) {
 	return e, true
 }
 
-// IsObject は ElemObject であるか判定します。
-func (e *elemBool) IsObject() bool {
-	return false
-}
-
-// IsArray は ElemArray であるか判定します。
-func (e *elemBool) IsArray() bool {
-	return false
-}
-
-// AsString は ElemString であるか判定します。
-func (e *elemBool) IsString() bool {
-	return false
-}
-
-// IsFloat は ElemFloat であるか判定します。
-func (e *elemBool) IsFloat() bool {
-	return false
-}
-
 // IsBool は ElemBool であるか判定します。
 func (e *elemBool) IsBool() bool {
-	return true
-}
-
-// IsNull は ElemNull であるか判定します。
-func (e *elemBool) IsNull() bool {
 	return true
 }
 

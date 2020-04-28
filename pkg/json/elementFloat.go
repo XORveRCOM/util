@@ -10,6 +10,7 @@ type ElemFloat interface {
 
 // elemFloat は数値型要素です
 type elemFloat struct {
+	element
 	value float64
 }
 
@@ -42,59 +43,14 @@ func (e *elemFloat) Value() interface{} {
 	return e.value
 }
 
-// AsObject は ElemObject にキャストします。
-func (e *elemFloat) AsObject() (ElemObject, bool) {
-	return nil, false
-}
-
-// AsArray は ElemArray にキャストします。
-func (e *elemFloat) AsArray() (ElemArray, bool) {
-	return nil, false
-}
-
-// AsString は ElemString にキャストします。
-func (e *elemFloat) AsString() (ElemString, bool) {
-	return nil, false
-}
-
 // AsFloat は elemFloat にキャストします。
 func (e *elemFloat) AsFloat() (ElemFloat, bool) {
 	return e, true
 }
 
-// AsBool は ElemBool にキャストします。
-func (e *elemFloat) AsBool() (ElemBool, bool) {
-	return nil, false
-}
-
-// IsObject は ElemObject であるか判定します。
-func (e *elemFloat) IsObject() bool {
-	return false
-}
-
-// IsArray は ElemArray であるか判定します。
-func (e *elemFloat) IsArray() bool {
-	return false
-}
-
-// AsString は ElemString であるか判定します。
-func (e *elemFloat) IsString() bool {
-	return false
-}
-
 // IsFloat は ElemFloat であるか判定します。
 func (e *elemFloat) IsFloat() bool {
 	return true
-}
-
-// IsBool は ElemBool であるか判定します。
-func (e *elemFloat) IsBool() bool {
-	return false
-}
-
-// IsNull は ElemNull であるか判定します。
-func (e *elemFloat) IsNull() bool {
-	return false
 }
 
 // Float は数値表現を返します。
