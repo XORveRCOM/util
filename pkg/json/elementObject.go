@@ -17,6 +17,7 @@ type ElemObject interface {
 
 // ElemObject はオブジェクト要素です
 type elemObject struct {
+	element
 	dic map[string]Element
 }
 
@@ -25,6 +26,7 @@ func NewElemObject() ElemObject {
 	return &elemObject{dic: map[string]Element{}}
 }
 
+// JSON 表現として {...} や [...] や "string" というような文字列を返します。
 func (e *elemObject) String() string {
 	return e.Text()
 }
@@ -80,54 +82,9 @@ func (e *elemObject) AsObject() (ElemObject, bool) {
 	return e, true
 }
 
-// AsArray は ElemArray にキャストします。
-func (e *elemObject) AsArray() (ElemArray, bool) {
-	return nil, false
-}
-
-// AsString は ElemString にキャストします。
-func (e *elemObject) AsString() (ElemString, bool) {
-	return nil, false
-}
-
-// AsFloat は ElemFloat にキャストします。
-func (e *elemObject) AsFloat() (ElemFloat, bool) {
-	return nil, false
-}
-
-// AsBool は ElemBool にキャストします。
-func (e *elemObject) AsBool() (ElemBool, bool) {
-	return nil, false
-}
-
 // IsObject は ElemObject であるか判定します。
 func (e *elemObject) IsObject() bool {
 	return true
-}
-
-// IsArray は ElemArray であるか判定します。
-func (e *elemObject) IsArray() bool {
-	return false
-}
-
-// AsString は ElemString であるか判定します。
-func (e *elemObject) IsString() bool {
-	return false
-}
-
-// IsFloat は ElemFloat であるか判定します。
-func (e *elemObject) IsFloat() bool {
-	return false
-}
-
-// IsBool は ElemBool であるか判定します。
-func (e *elemObject) IsBool() bool {
-	return false
-}
-
-// IsNull は ElemNull であるか判定します。
-func (e *elemObject) IsNull() bool {
-	return false
 }
 
 // Keys はキーの一覧をソートして返します。

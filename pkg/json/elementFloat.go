@@ -19,6 +19,7 @@ func NewElemFloat(value float64) *elemFloat {
 	return &elemFloat{value: value}
 }
 
+// JSON 表現として {...} や [...] や "string" というような文字列を返します。
 func (e elemFloat) String() string {
 	return e.Text()
 }

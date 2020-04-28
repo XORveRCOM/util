@@ -19,6 +19,7 @@ func NewElemBool(value bool) *elemBool {
 	return &elemBool{value: value}
 }
 
+// JSON 表現として {...} や [...] や "string" というような文字列を返します。
 func (e elemBool) String() string {
 	return e.Text()
 }

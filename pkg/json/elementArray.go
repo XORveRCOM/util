@@ -27,6 +27,7 @@ func NewElemArray() ElemArray {
 	return &elemArray{value: []Element{}}
 }
 
+// JSON 表現として {...} や [...] や "string" というような文字列を返します。
 func (e *elemArray) String() string {
 	return e.Text()
 }

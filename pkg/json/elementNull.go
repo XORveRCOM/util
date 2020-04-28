@@ -18,6 +18,11 @@ func (e *elemNull) String() string {
 	return e.Text()
 }
 
+// Text は文字列表現を返します。
+func (e *elemNull) Text() string {
+	return "null"
+}
+
 // Type は要素の型を取得します。
 func (e *elemNull) Type() ElementType {
 	return TypeNull
@@ -31,11 +36,6 @@ func (e *elemNull) Paths() []PathJSON {
 // Value はインタフェースとしての内容を取得します。
 func (e *elemNull) Value() interface{} {
 	return nil
-}
-
-// Text は文字列表現を返します。
-func (e *elemNull) Text() string {
-	return "null"
 }
 
 // IsNull は ElemNull であるか判定します。
