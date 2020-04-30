@@ -35,6 +35,8 @@ type Element interface {
 	IsBool() bool
 	// IsNull は ElemNull であるか判定します。
 	IsNull() bool
+	// Clone はディープコピーした Element を返します。
+	Clone() Element
 }
 
 type element struct{}

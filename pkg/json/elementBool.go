@@ -54,6 +54,11 @@ func (e *elemBool) IsBool() bool {
 	return true
 }
 
+// Clone はディープコピーした Element を返します。
+func (e *elemBool) Clone() Element {
+	return NewElemBool(e.value)
+}
+
 // Bool は論理値表現を返します。
 func (e *elemBool) Bool() bool {
 	return e.value

@@ -51,6 +51,11 @@ func (e *elemString) IsString() bool {
 	return true
 }
 
+// Clone はディープコピーした Element を返します。
+func (e *elemString) Clone() Element {
+	return NewElemString(e.value)
+}
+
 // Length は文字列長を返します。
 func (e *elemString) Length() int {
 	return len(e.value)

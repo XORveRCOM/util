@@ -54,6 +54,11 @@ func (e *elemFloat) IsFloat() bool {
 	return true
 }
 
+// Clone はディープコピーした Element を返します。
+func (e *elemFloat) Clone() Element {
+	return NewElemFloat(e.value)
+}
+
 // Float は数値表現を返します。
 func (e *elemFloat) Float() float64 {
 	return e.value

@@ -19,7 +19,7 @@ func TestElement(t *testing.T) {
 	t.Log(ToJSON(elem, false))
 
 	// ファイルに保存
-	json1 := ToJSON(elem, true)
+	json1 := ToJSON(elem.Clone(), true)
 	filename := fpath.Join(temp, "test.json")
 	if e := SaveToJSONFile(filename, elem, false); e != nil {
 		t.Fatal(e)

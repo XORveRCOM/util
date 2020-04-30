@@ -42,3 +42,8 @@ func (e *elemNull) Value() interface{} {
 func (e *elemNull) IsNull() bool {
 	return true
 }
+
+// Clone はディープコピーした Element を返します。
+func (e *elemNull) Clone() Element {
+	return NewElemNull()
+}

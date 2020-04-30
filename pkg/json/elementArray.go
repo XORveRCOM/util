@@ -82,6 +82,15 @@ func (e *elemArray) IsArray() bool {
 	return true
 }
 
+// Clone はディープコピーした Element を返します。
+func (e *elemArray) Clone() Element {
+	arr := NewElemArray()
+	for _, elem := range e.value {
+		arr.Append(elem.Clone())
+	}
+	return arr
+}
+
 // Size は子供の数を返します。
 func (e *elemArray) Size() int {
 	return len(e.value)
