@@ -12,6 +12,11 @@ const (
 
 // JoinJSONPath はパス配列を結合してパス文字列を生成します。
 func JoinJSONPath(paths []string) PathJSON {
+	return JoinJSONVarPath(paths...)
+}
+
+// JoinJSONVarPath はパス配列を結合してパス文字列を生成します。
+func JoinJSONVarPath(paths ...string) PathJSON {
 	return PathJSON(strings.Join(paths, jsonPathSeparater))
 }
 
