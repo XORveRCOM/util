@@ -42,24 +42,24 @@ func LoadFromJSONByte(data []byte) (Element, error) {
 	if e != nil {
 		return nil, fmt.Errorf("%v", e)
 	}
-	return parse(jsondata), nil
+	return Parse(jsondata), nil
 }
 
-// parse は要素を返します。
-func parse(i interface{}) Element {
+// Parse は要素を返します。
+func Parse(i interface{}) Element {
 	switch val := i.(type) {
 	case []interface{}:
 		// 配列[]
 		ret := NewElemArray()
 		for _, value := range val {
-			ret.Append(parse(value))
+			ret.Append(Parse(value))
 		}
 		return ret
 	case map[string]interface{}:
 		// オブジェクト{}
 		ret := NewElemObject()
 		for key, value := range val {
-			ret.Put(key, parse(value))
+			ret.Put(key, Parse(value))
 		}
 		return ret
 	case string:
