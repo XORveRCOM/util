@@ -2,6 +2,7 @@ package json
 
 import "strconv"
 
+// ElemFloat は数値型要素です
 type ElemFloat interface {
 	Element
 	// Float は数値表現を返します。
@@ -14,8 +15,8 @@ type elemFloat struct {
 	value float64
 }
 
-// NewelemFloat は要素を作成します。
-func NewElemFloat(value float64) *elemFloat {
+// NewElemFloat は要素を作成します。
+func NewElemFloat(value float64) ElemFloat {
 	return &elemFloat{value: value}
 }
 

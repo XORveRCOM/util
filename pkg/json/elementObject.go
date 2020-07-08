@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// ElemObject はオブジェクト要素です
 type ElemObject interface {
 	Element
 	// Keys はキーの一覧をソートして返します。

@@ -1,5 +1,6 @@
 package json
 
+// ElemString は文字列型要素です
 type ElemString interface {
 	Element
 	// Length は文字列長を返します。

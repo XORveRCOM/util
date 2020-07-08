@@ -1,5 +1,6 @@
 package json
 
+// ElemNull はNULL値型要素です
 type ElemNull interface {
 	Element
 }

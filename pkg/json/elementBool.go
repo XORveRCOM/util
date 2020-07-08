@@ -2,6 +2,7 @@ package json
 
 import "strconv"
 
+// ElemBool は論理値型要素です
 type ElemBool interface {
 	Element
 	// Bool は論理値表現を返します。
@@ -15,7 +16,7 @@ type elemBool struct {
 }
 
 // NewElemBool は要素を作成します。
-func NewElemBool(value bool) *elemBool {
+func NewElemBool(value bool) ElemBool {
 	return &elemBool{value: value}
 }
 
