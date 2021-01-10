@@ -6,7 +6,6 @@ import (
 	libjson "encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
 )
 
 // LoadFromJSONFile は設定ファイルから Element を作成します。
@@ -21,7 +20,7 @@ func LoadFromJSONFile(filename string) (Element, error) {
 // SaveToJSONFile は Element を設定ファイルに出力します。
 func SaveToJSONFile(filename string, elem Element, indentation bool) error {
 	jsonstr := ToJSON(elem, indentation)
-	return ioutil.WriteFile(filename, []byte(jsonstr), os.ModePerm)
+	return ioutil.WriteFile(filename, []byte(jsonstr), 0755)
 }
 
 // ToJSON は Element を json 文字列に変換します。

@@ -9,7 +9,7 @@ import (
 
 func TestElement(t *testing.T) {
 	temp := fpath.Join(os.TempDir(), "config_test")
-	os.MkdirAll(temp, os.ModeDir) // nolint
+	os.MkdirAll(temp, 0755) // nolint
 	defer os.RemoveAll(temp)
 	elem := NewElemObject()
 	aelem := NewElemArray()
