@@ -46,3 +46,15 @@ func FileIfDelete(file string) error {
 	// 削除
 	return os.Remove(file)
 }
+
+// フアイルが存在するかをチェック
+func FileExists(filename string) bool {
+	f, err := os.Stat(filename)
+	return err == nil && false == f.IsDir()
+}
+
+// ディレクトリが存在するかをチェック
+func DirExists(filename string) bool {
+	f, err := os.Stat(filename)
+	return err == nil && f.IsDir()
+}
