@@ -1,5 +1,5 @@
 // Package textlines はテキストの読み書きを行うパッケージです。
-package textlines
+package text
 
 import (
 	"bufio"
