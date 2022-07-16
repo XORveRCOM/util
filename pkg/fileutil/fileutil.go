@@ -3,6 +3,7 @@ package fileutil
 import (
 	"io/ioutil"
 	"os"
+	"sort"
 )
 
 // FileCopy ファイルコピー
@@ -57,4 +58,32 @@ func FileExists(filename string) bool {
 func DirExists(filename string) bool {
 	f, err := os.Stat(filename)
 	return err == nil && f.IsDir()
+}
+
+// FilesList は folder パスの全ファイル名の文字列配列を返します
+func FilesList(folder string) []string {
+	res := []string{}
+	if files, err := ioutil.ReadDir(folder); err == nil {
+		for _, file := range files {
+			if false == file.IsDir() {
+				res = append(res, file.Name())
+			}
+		}
+	}
+	sort.Sort(sort.StringSlice(res))
+	return res
+}
+
+// DirsList は
+func DirsList(folder string) []string {
+	res := []string{}
+	if files, err := ioutil.ReadDir(folder); err == nil {
+		for _, file := range files {
+			if file.IsDir() {
+				res = append(res, file.Name())
+			}
+		}
+	}
+	sort.Sort(sort.StringSlice(res))
+	return res
 }

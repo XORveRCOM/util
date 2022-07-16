@@ -1,29 +1,31 @@
-package calledcheck
+package calledcheck_test
 
 import (
 	"testing"
+
+	cc "github.com/xorvercom/util/pkg/calledcheck"
 )
 
 func TestCalledByFID(t *testing.T) {
-	fid := GetFunctionID()
+	fid := cc.GetFunctionID()
 	func() {
-		if !CalledByFID(fid) {
+		if !cc.CalledByFID(fid) {
 			t.Error("calledby error")
 		}
-		if CalledByFID("xxx") {
+		if cc.CalledByFID("xxx") {
 			t.Error("calledby error")
 		}
 	}()
 }
 
 func TestCalledByPC(t *testing.T) {
-	pc := GetCallerPC()
+	pc := cc.GetCallerPC()
 	t.Log(pc)
 	func() {
-		if !CalledByPC(pc) {
+		if !cc.CalledByPC(pc) {
 			t.Error("calledby error")
 		}
-		if CalledByPC(CalledPC(0)) {
+		if cc.CalledByPC(cc.CalledPC(0)) {
 			t.Error("calledby error")
 		}
 	}()

@@ -1,7 +1,9 @@
-package easywork
+package easywork_test
 
 import (
 	"testing"
+
+	ew "github.com/xorvercom/util/pkg/easywork"
 )
 
 const (
@@ -34,7 +36,7 @@ func (w *work2) Run() {
 // TestEasyWork は全ての機能をテストします。
 func TestEasyWork(t *testing.T) {
 	// 生成
-	eg := NewGroup()
+	eg := ew.NewGroup()
 
 	// 仕事の開始
 	eg.Start(&work1{t: t, i: 1})
@@ -63,7 +65,7 @@ func TestEasyWork(t *testing.T) {
 	func() {
 		defer func() {
 			err := recover()
-			if err != startAfterWaitPanic {
+			if err != ew.StartAfterWaitPanic {
 				t.Fatalf("got %v\nwant %v", err, "ew.Append()")
 			}
 		}()

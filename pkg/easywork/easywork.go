@@ -53,6 +53,7 @@ func NewGroup() WaitGroup {
 
 const (
 	startAfterWaitPanic = "Start() after Wait()"
+	StartAfterWaitPanic = startAfterWaitPanic
 )
 
 // Start は仕事を開始します。

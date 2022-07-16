@@ -15,7 +15,7 @@ func Example() {
 	write.Append("abcd")
 	write.Append("0123")
 	if err := write.SaveTo(filename); err != nil {
-		panic("save error")
+		panic(err)
 	}
 
 	// 読み込み

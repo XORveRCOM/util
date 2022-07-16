@@ -1,44 +1,46 @@
-package json
+package json_test
 
 import (
 	"os"
 	fpath "path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/xorvercom/util/pkg/json"
 )
 
 func TestElement(t *testing.T) {
 	temp := fpath.Join(os.TempDir(), "config_test")
 	os.MkdirAll(temp, 0755) // nolint
 	defer os.RemoveAll(temp)
-	elem := NewElemObject()
-	aelem := NewElemArray()
-	aelem.Append(NewElemString("abc"), NewElemBool(true), NewElemFloat(3.14), NewElemNull())
+	elem := json.NewElemObject()
+	aelem := json.NewElemArray()
+	aelem.Append(json.NewElemString("abc"), json.NewElemBool(true), json.NewElemFloat(3.14), json.NewElemNull())
 	elem.Put("abc", aelem)
-	t.Log(ToJSON(elem, true))
-	t.Log(ToJSON(elem, false))
+	t.Log(json.ToJSON(elem, true))
+	t.Log(json.ToJSON(elem, false))
 
 	// ファイルに保存
-	json1 := ToJSON(elem.Clone(), true)
+	json1 := json.ToJSON(elem.Clone(), true)
 	filename := fpath.Join(temp, "test.json")
-	if e := SaveToJSONFile(filename, elem, false); e != nil {
+	if e := json.SaveToJSONFile(filename, elem, false); e != nil {
 		t.Fatal(e)
 	}
-	elem2, e := LoadFromJSONFile(filename)
+	elem2, e := json.LoadFromJSONFile(filename)
 	if e != nil {
 		t.Fatal(e)
 	}
-	json2 := ToJSON(elem2, true)
+	json2 := json.ToJSON(elem2, true)
 	if json1 != json2 {
 		t.Fatalf("%s != %s", json1, json2)
 	}
 }
 
 func TestElementObject(t *testing.T) {
-	e := NewElemObject()
-	e.Put("b", NewElemString("1"))
-	e.Put("c", NewElemString("2"))
-	e.Put("a", NewElemString("3"))
+	e := json.NewElemObject()
+	e.Put("b", json.NewElemString("1"))
+	e.Put("c", json.NewElemString("2"))
+	e.Put("a", json.NewElemString("3"))
 	keys := e.Keys()
 	if strings.Join(keys, ",") != "a,b,c" {
 		t.Fatal(keys)
@@ -47,7 +49,7 @@ func TestElementObject(t *testing.T) {
 
 func TestElementFloat(t *testing.T) {
 	f := 3.14
-	e := NewElemFloat(f)
+	e := json.NewElemFloat(f)
 	if e.Float() != f {
 		t.Fatal()
 	}
@@ -55,47 +57,47 @@ func TestElementFloat(t *testing.T) {
 
 func TestElementBool(t *testing.T) {
 	f := true
-	e := NewElemBool(f)
+	e := json.NewElemBool(f)
 	if e.Bool() != f {
 		t.Fatal()
 	}
 }
 
 func TestPaths(t *testing.T) {
-	var elem Element
-	var paths []PathJSON
+	var elem json.Element
+	var paths []json.PathJSON
 
-	elem = NewElemObject()
+	elem = json.NewElemObject()
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
 	}
 
-	elem = NewElemArray()
+	elem = json.NewElemArray()
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
 	}
 
-	elem = NewElemBool(true)
+	elem = json.NewElemBool(true)
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
 	}
 
-	elem = NewElemFloat(0)
+	elem = json.NewElemFloat(0)
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
 	}
 
-	elem = NewElemNull()
+	elem = json.NewElemNull()
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
 	}
 
-	elem = NewElemString("")
+	elem = json.NewElemString("")
 	paths = elem.Paths()
 	if len(paths) != 0 {
 		t.Failed()
@@ -103,42 +105,42 @@ func TestPaths(t *testing.T) {
 }
 
 func TestType(t *testing.T) {
-	var elem Element
+	var elem json.Element
 
-	elem = NewElemObject()
-	if elem.Type() != TypeObject {
+	elem = json.NewElemObject()
+	if elem.Type() != json.TypeObject {
 		t.Failed()
 	}
 
-	elem = NewElemArray()
-	if elem.Type() != TypeArray {
+	elem = json.NewElemArray()
+	if elem.Type() != json.TypeArray {
 		t.Failed()
 	}
 
-	elem = NewElemBool(true)
-	if elem.Type() != TypeBool {
+	elem = json.NewElemBool(true)
+	if elem.Type() != json.TypeBool {
 		t.Failed()
 	}
 
-	elem = NewElemFloat(0)
-	if elem.Type() != TypeFloat {
+	elem = json.NewElemFloat(0)
+	if elem.Type() != json.TypeFloat {
 		t.Failed()
 	}
 
-	elem = NewElemNull()
-	if elem.Type() != TypeNull {
+	elem = json.NewElemNull()
+	if elem.Type() != json.TypeNull {
 		t.Failed()
 	}
 
-	elem = NewElemString("")
-	if elem.Type() != TypeString {
+	elem = json.NewElemString("")
+	if elem.Type() != json.TypeString {
 		t.Failed()
 	}
 }
 func TestAs(t *testing.T) {
-	var elem Element
+	var elem json.Element
 
-	elem = NewElemObject()
+	elem = json.NewElemObject()
 	if e, ok := elem.AsObject(); false == ok {
 		t.Failed()
 	} else {
@@ -159,7 +161,7 @@ func TestAs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemArray()
+	elem = json.NewElemArray()
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
@@ -180,7 +182,7 @@ func TestAs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemString("")
+	elem = json.NewElemString("")
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
@@ -201,7 +203,7 @@ func TestAs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemFloat(1)
+	elem = json.NewElemFloat(1)
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
@@ -222,7 +224,7 @@ func TestAs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemBool(true)
+	elem = json.NewElemBool(true)
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
@@ -243,7 +245,7 @@ func TestAs(t *testing.T) {
 		}
 	}
 
-	elem = NewElemNull()
+	elem = json.NewElemNull()
 	if _, ok := elem.AsObject(); ok {
 		t.Failed()
 	}
@@ -266,9 +268,9 @@ func TestAs(t *testing.T) {
 }
 
 func TestIs(t *testing.T) {
-	var elem Element
+	var elem json.Element
 
-	elem = NewElemObject()
+	elem = json.NewElemObject()
 	if false == elem.IsObject() {
 		t.Failed()
 	}
@@ -291,7 +293,7 @@ func TestIs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemArray()
+	elem = json.NewElemArray()
 	if elem.IsObject() {
 		t.Failed()
 	}
@@ -314,7 +316,7 @@ func TestIs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemString("")
+	elem = json.NewElemString("")
 	if elem.IsObject() {
 		t.Failed()
 	}
@@ -337,7 +339,7 @@ func TestIs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemFloat(1)
+	elem = json.NewElemFloat(1)
 	if elem.IsObject() {
 		t.Failed()
 	}
@@ -360,7 +362,7 @@ func TestIs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemBool(true)
+	elem = json.NewElemBool(true)
 	if elem.IsObject() {
 		t.Failed()
 	}
@@ -383,7 +385,7 @@ func TestIs(t *testing.T) {
 		t.Failed()
 	}
 
-	elem = NewElemNull()
+	elem = json.NewElemNull()
 	if elem.IsObject() {
 		t.Failed()
 	}
@@ -408,17 +410,17 @@ func TestIs(t *testing.T) {
 }
 
 func TestLength(t *testing.T) {
-	var elem ElemString
+	var elem json.ElemString
 	var str string
 
 	str = ""
-	elem = NewElemString(str)
+	elem = json.NewElemString(str)
 	if elem.Length() != len(str) {
 		t.Failed()
 	}
 
 	str = "1234"
-	elem = NewElemString(str)
+	elem = json.NewElemString(str)
 	if elem.Length() != len(str) {
 		t.Failed()
 	}

@@ -1,4 +1,4 @@
-package fileutil
+package fileutil_test
 
 import (
 	"fmt"
@@ -6,11 +6,33 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/xorvercom/util/pkg/fileutil"
 )
 
-func TestRun(t *testing.T) {
+func ExampleTempSpace() {
+	err := fileutil.TempSpace(func(tempdir string) error {
+		filename := filepath.Join(tempdir, "test.txt")
+		f, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		_, err = f.WriteString("data")
+		if err != nil {
+			return err
+		}
+		f.Close()
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func TestTempSpace(t *testing.T) {
 	var tdir string
-	err := TempSpace(func(tempdir string) error {
+	err := fileutil.TempSpace(func(tempdir string) error {
 		tdir = tempdir
 		data := "ABCD"
 		filename := filepath.Join(tempdir, "test.txt")
@@ -36,12 +58,13 @@ func TestRun(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if FileExists(tdir) {
+	if fileutil.FileExists(tdir) {
 		t.Fatal(tdir)
 	}
 }
+
 func TestRunPanic(t *testing.T) {
-	err := TempSpace(func(tempdir string) error {
+	err := fileutil.TempSpace(func(tempdir string) error {
 		panic("err")
 	})
 	if err == nil {
