@@ -1,7 +1,7 @@
-// Package easywork は sync.WaitGroup をラップしユーザロジックの実行を主眼として改善を行います。
+// Package easywork は sync.WaitGroup などをラップするという手段でユーザロジックの実行を主眼として改善を行います。
 // sync.WaitGroup の操作は本来のユーザロジックとは関係のない作業が必要であり、その実装でのミスが想定されます。
-// easywork は sync.WaitGroup の操作とユーザロジックを分離し、実装ミスを防止します。
-// ユーザロジックは Running インタフェースとして実装してください。
+// easywork は sync.WaitGroup と sync.Mutex の操作を隠蔽することで、実装ミスを防止します。
+// ユーザロジックは Runnable インタフェースを実装して記述してください。
 package easywork
 
 import (
