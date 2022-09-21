@@ -28,7 +28,7 @@ func NewElemObject() ElemObject {
 }
 
 // JSON 表現として {...} や [...] や "string" というような文字列を返します。
-func (e *elemObject) String() string {
+func (e elemObject) String() string {
 	return e.Text()
 }
 
