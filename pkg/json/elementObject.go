@@ -10,10 +10,14 @@ type ElemObject interface {
 	Element
 	// Keys はキーの一覧をソートして返します。
 	Keys() []string
+	// Size は子供の数を返します。
+	Size() int
 	// Child は子供の要素を返します。
 	Child(key string) Element
 	// Put は要素を追加します。
 	Put(key string, child Element) ElemObject
+	// Delete は要素を削除します。
+	Delete(key string)
 }
 
 // ElemObject はオブジェクト要素です
@@ -108,6 +112,11 @@ func (e *elemObject) Keys() []string {
 	return ret
 }
 
+// Size は子供の数を返します。
+func (e *elemObject) Size() int {
+	return len(e.value)
+}
+
 // Child は子供の要素を返します。
 func (e *elemObject) Child(key string) Element {
 	eval, ok := e.value[key]
@@ -121,4 +130,9 @@ func (e *elemObject) Child(key string) Element {
 func (e *elemObject) Put(key string, child Element) ElemObject {
 	e.value[key] = child
 	return e
+}
+
+// Delete は要素を削除します。
+func (e *elemObject) Delete(key string) {
+	delete(e.value, key)
 }

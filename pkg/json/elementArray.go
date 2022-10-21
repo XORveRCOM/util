@@ -14,6 +14,8 @@ type ElemArray interface {
 	Child(num int) Element
 	// Append は要素を追加します。
 	Append(child ...Element) ElemArray
+	// Delete は要素を削除します。
+	Delete(num int)
 }
 
 // ElemArray は配列型要素です
@@ -108,4 +110,19 @@ func (e *elemArray) Child(num int) Element {
 func (e *elemArray) Append(child ...Element) ElemArray {
 	e.value = append(e.value, child...)
 	return e
+}
+
+// Delete は要素を削除します。
+func (e *elemArray) Delete(num int) {
+	s := e.Size()
+	switch {
+	case num < 0 || s <= num:
+		return
+	case num == 0:
+		e.value = e.value[1:]
+	case s == num+1:
+		e.value = e.value[:num+1]
+	default:
+		e.value = append(e.value[:num], e.value[num+1:]...)
+	}
 }

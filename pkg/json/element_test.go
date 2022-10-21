@@ -425,3 +425,109 @@ func TestLength(t *testing.T) {
 		t.Failed()
 	}
 }
+
+func TestArrayDelete(t *testing.T) {
+	// 要素がない場合
+	ae := json.NewElemArray()
+	ae.Delete(-1)
+	ae.Delete(0)
+
+	// 単一要素
+	ae.Append(json.NewElemString("1"))
+	// 前後の削除（試行）
+	ae.Delete(-1)
+	ae.Delete(ae.Size())
+	if ae.Size() != 1 {
+		t.Failed()
+	}
+	// 要素の削除
+	ae.Delete(0)
+	if ae.Size() != 0 {
+		t.Failed()
+	}
+
+	// 複数要素
+	ae = json.NewElemArray()
+	ae.Append(json.NewElemString("1"), json.NewElemString("2"), json.NewElemString("3"))
+	// 前後の削除（試行）
+	ae.Delete(-1)
+	ae.Delete(ae.Size())
+	if ae.Size() != 2 {
+		t.Failed()
+	}
+	// 先頭要素の削除
+	ae.Delete(0)
+	if ae.Size() != 2 {
+		t.Failed()
+	}
+	if es, ok := ae.Child(0).AsString(); ok {
+		if es.Text() != "2" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+	if es, ok := ae.Child(1).AsString(); ok {
+		if es.Text() != "3" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+	// 中間要素の削除
+	ae = json.NewElemArray()
+	ae.Append(json.NewElemString("1"), json.NewElemString("2"), json.NewElemString("3"))
+	ae.Delete(1)
+	if ae.Size() != 2 {
+		t.Failed()
+	}
+	if es, ok := ae.Child(0).AsString(); ok {
+		if es.Text() != "1" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+	if es, ok := ae.Child(1).AsString(); ok {
+		if es.Text() != "3" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+	// 末尾要素の削除
+	ae = json.NewElemArray()
+	ae.Append(json.NewElemString("1"), json.NewElemString("2"), json.NewElemString("3"))
+	ae.Delete(2)
+	if ae.Size() != 2 {
+		t.Failed()
+	}
+	if es, ok := ae.Child(0).AsString(); ok {
+		if es.Text() != "1" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+	if es, ok := ae.Child(1).AsString(); ok {
+		if es.Text() != "2" {
+			t.Failed()
+		}
+	} else {
+		t.Failed()
+	}
+}
+
+func TestObjectDelete(t *testing.T) {
+	oe := json.NewElemObject()
+	oe.Delete("")
+	oe.Put("1", json.NewElemString("1"))
+	oe.Delete("")
+	if oe.Size() != 1 {
+		t.Failed()
+	}
+	oe.Delete("1")
+	if oe.Size() != 0 {
+		t.Failed()
+	}
+}
