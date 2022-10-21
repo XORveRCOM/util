@@ -2,7 +2,6 @@ package fileutil_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -46,7 +45,7 @@ func TestTempSpace(t *testing.T) {
 			return err
 		}
 		f.Close()
-		b, err := ioutil.ReadFile(filename)
+		b, err := os.ReadFile(filename)
 		if err != nil {
 			return err
 		}

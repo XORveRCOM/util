@@ -4,7 +4,6 @@ import (
 	azip "archive/zip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"strings"
 
 	"golang.org/x/text/encoding/japanese"
@@ -81,7 +80,7 @@ func (d *dic) Get(filepath string) ([]byte, error) {
 		return nil, err
 	}
 	defer rc.Close()
-	return ioutil.ReadAll(rc)
+	return io.ReadAll(rc)
 }
 
 // GetReader は、そのファイルの中身を取得します。

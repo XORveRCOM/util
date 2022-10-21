@@ -108,6 +108,18 @@ func TestFileList(t *testing.T) {
 			return fmt.Errorf("err")
 		}
 
+		err = fileutil.FileIfMove(filename2, filename1)
+		if err!=nil {
+			return err
+		}
+		files = fileutil.FilesList(tempdir)
+		if len(files) != 1 {
+			return fmt.Errorf("err")
+		}
+		if files[0] != "file1.txt" {
+			return fmt.Errorf("err")
+		}
+
 		return nil
 	})
 	if err != nil {
