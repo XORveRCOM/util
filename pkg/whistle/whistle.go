@@ -20,7 +20,7 @@ const (
 // 新規に Whistle を生成します。
 func New() *Whistle {
 	w := &Whistle{}
-	w.recv = make(chan int)
+	w.recv = make(chan int, 1)
 	w.done = make(chan struct{}, 1)
 	go w.run()
 	return w
@@ -64,7 +64,9 @@ func (w *Whistle) Child() *Whistle {
 
 func (w *Whistle) send(code int) {
 	for _, child := range w.childs {
-		child.recv <- code
+		if len(child.recv) == 0 {
+			child.recv <- code
+		}
 	}
 }
 
@@ -81,5 +83,7 @@ func (w *Whistle) Quit() {
 	defer w.mu.RUnlock()
 	w.send(recv_quit)
 	// 自身に停止を指示
-	w.recv <- recv_quit
+	if len(w.recv) == 0 {
+		w.recv <- recv_quit
+	}
 }
