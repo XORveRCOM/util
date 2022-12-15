@@ -21,7 +21,7 @@ const (
 func New() *Whistle {
 	w := &Whistle{}
 	w.recv = make(chan int)
-	w.done = make(chan struct{})
+	w.done = make(chan struct{}, 2)
 	go w.run()
 	return w
 }
