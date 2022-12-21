@@ -12,8 +12,12 @@ import (
 func TestRing(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	w := whistle.New()
+	wb := whistle.New()
+	defer wb.Quit()
+	w := wb.Child()
 	defer w.Quit()
+	wdummy := wb.Child()
+	defer wdummy.Quit()
 	wg := &sync.WaitGroup{}
 	const gcount = 3
 	wg.Add(gcount)
