@@ -14,10 +14,22 @@ type Runnable interface {
 	Run()
 }
 
+// 関数リテラルを Runnable にする単純実装です。
+type PlaneRunnable struct {
+	R func()
+}
+
+// 関数リテラルを呼び出します。
+func (p *PlaneRunnable) Run() {
+	p.R()
+}
+
 // WaitGroup は仕事(Runnable)の完了を待ちます。
 type WaitGroup interface {
 	// Start は Runnable を実行します
 	Start(Runnable)
+	// Start は func() を実行します
+	Run(run func())
 	// Wait は実行した Runnable が終了するのを待ちます
 	Wait()
 	// Results は実行した Runnable の一覧を返します
@@ -55,6 +67,12 @@ const (
 	startAfterWaitPanic = "Start() after Wait()"
 	StartAfterWaitPanic = startAfterWaitPanic
 )
+
+// Start は関数リテラルとして仕事を開始します。
+func (eg *easyWait) Run(run func()) {
+	p := &PlaneRunnable{R: run}
+	eg.Start(p)
+}
 
 // Start は仕事を開始します。
 func (eg *easyWait) Start(ew Runnable) {
