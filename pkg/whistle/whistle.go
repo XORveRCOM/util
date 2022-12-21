@@ -96,11 +96,11 @@ func (w *Whistle) Quit() {
 		w.parent.childs = childs
 		w.parent.mu.Unlock()
 	}
+	w.mu.Lock()
+	w.childs = nil
+	w.mu.Unlock()
 	// 自身に停止を指示
 	if len(w.recv) == 0 {
 		w.recv <- recv_quit
 	}
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	w.childs = nil
 }
