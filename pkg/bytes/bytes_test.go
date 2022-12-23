@@ -1,8 +1,10 @@
-package bytes
+package bytes_test
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/xorvercom/util/pkg/bytes"
 )
 
 func Test_clearBytes(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_clearBytes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ClearBytes(tt.args.size, tt.args.init)
+			got := bytes.ClearBytes(tt.args.size, tt.args.init)
 			t.Logf("got:%v", got)
 			t.Logf("tt.want:%v", tt.want)
 			if !reflect.DeepEqual(got, tt.want) {
@@ -49,7 +51,7 @@ func Test_transpose(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TransposeBits(tt.args.src)
+			got := bytes.TransposeBits(tt.args.src)
 			t.Logf("got:%v", got)
 			t.Logf("tt.want:%v", tt.want)
 			if !reflect.DeepEqual(got, tt.want) {

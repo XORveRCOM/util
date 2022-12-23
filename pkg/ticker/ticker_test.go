@@ -1,9 +1,11 @@
-package ticker
+package ticker_test
 
 import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/xorvercom/util/pkg/ticker"
 )
 
 // 周期実行
@@ -32,7 +34,7 @@ func (w *worker) String() string {
 
 // TestNew は作成した直後にStopを呼びます。
 func TestNew(t *testing.T) {
-	tick := New()
+	tick := ticker.New()
 	tick.Stop()
 	tick.Wait()
 	t.Log()
@@ -40,7 +42,7 @@ func TestNew(t *testing.T) {
 
 // 通常テスト
 func TestStart(t *testing.T) {
-	tick := New()
+	tick := ticker.New()
 	tick.Start(&worker{id: 1, num: 0, sec: 500}, 300*time.Millisecond)
 	tick.Start(&worker{id: 2, num: 0, sec: 500}, 500*time.Millisecond)
 	tick.Start(&worker{id: 3, num: 0, sec: 500}, 600*time.Millisecond)

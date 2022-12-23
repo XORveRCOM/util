@@ -1,17 +1,19 @@
-package text
+package text_test
 
 import (
 	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/xorvercom/util/pkg/text"
 )
 
 func Example() {
 	filename := filepath.Join(os.TempDir(), "test.txt")
 
 	// 書き出し
-	write := New()
+	write := text.New()
 	write.Append("abcd")
 	write.Append("0123")
 	if err := write.SaveTo(filename); err != nil {
@@ -20,7 +22,7 @@ func Example() {
 
 	// 読み込み
 	// read, err := LoadFrom(filename) でも同じ挙動となります
-	read := New()
+	read := text.New()
 	if err := read.LoadFrom(filename); err != nil {
 		panic("load error")
 	}
@@ -38,9 +40,9 @@ func Example() {
 
 func TestAll(t *testing.T) {
 	tempdir := os.TempDir()
-	var txt TextLines
+	var txt text.TextLines
 	var err error
-	txt = New()
+	txt = text.New()
 
 	filename := filepath.Join(tempdir, "test.txt")
 	txt.Append("abcd")
@@ -49,7 +51,7 @@ func TestAll(t *testing.T) {
 		t.Fail()
 	}
 
-	txt, err = LoadFrom(filename)
+	txt, err = text.LoadFrom(filename)
 	if err != nil {
 		t.Fail()
 	}
@@ -62,14 +64,6 @@ func TestAll(t *testing.T) {
 
 	func() {
 		err = txt.SaveTo("\tfile")
-		if err == nil {
-			t.Fail()
-		}
-	}()
-
-	func() {
-		txt = (*textLines)(nil)
-		err = txt.SaveTo(filename)
 		if err == nil {
 			t.Fail()
 		}

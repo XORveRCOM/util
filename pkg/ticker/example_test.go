@@ -1,8 +1,10 @@
-package ticker
+package ticker_test
 
 import (
 	"fmt"
 	"time"
+
+	"github.com/xorvercom/util/pkg/ticker"
 )
 
 // 周期実行（ユーザロジック）
@@ -10,7 +12,7 @@ type tick struct {
 	// カウンタ
 	count int
 	// 停止用
-	ticker Ticker
+	ticker ticker.Ticker
 }
 
 // 事前処理（ユーザロジック）
@@ -36,7 +38,7 @@ func (t *tick) After() {
 
 func Example() {
 	t := &tick{}
-	t.ticker = New()
+	t.ticker = ticker.New()
 	t.ticker.Start(t, time.Duration(100)*time.Millisecond)
 	t.ticker.Wait()
 	fmt.Println("done")

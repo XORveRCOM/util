@@ -90,7 +90,7 @@ func LoadFrom(filename string) (TextLines, error) {
 func (t *textLines) LoadFrom(filename string) error {
 	f, err := t.hook.os.Open(filename)
 	if err != nil {
-		return fmt.Errorf("os.Open(%s) return %v", filename, err)
+		return fmt.Errorf("os.Open(%s) return %w", filename, err)
 	}
 	defer f.Close()
 
@@ -100,7 +100,7 @@ func (t *textLines) LoadFrom(filename string) error {
 	}
 	err = s.Err()
 	if err != nil {
-		return fmt.Errorf("scanner.Scan(%s) return %v", filename, err)
+		return fmt.Errorf("scanner.Scan(%s) return %w", filename, err)
 	}
 	return err
 }
@@ -122,14 +122,14 @@ func (t *textLines) SaveTo(filename string) error {
 	}
 	f, err := t.hook.os.Create(filename)
 	if err != nil {
-		return fmt.Errorf("os.Create(%s) return %v", filename, err)
+		return fmt.Errorf("os.Create(%s) return %w", filename, err)
 	}
 	defer f.Close()
 
 	for _, line := range t.Lines() {
 		_, err := f.WriteString(line + "\n")
 		if err != nil {
-			return fmt.Errorf("Writer(%s).WriteString() return %v", filename, err)
+			return fmt.Errorf("Writer(%s).WriteString() return %w", filename, err)
 		}
 	}
 	return nil
