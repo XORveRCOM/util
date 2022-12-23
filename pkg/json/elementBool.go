@@ -21,7 +21,7 @@ func NewElemBool(value bool) ElemBool {
 }
 
 // JSON 表現として {...} や [...] や "string" というような文字列を返します。
-func (e elemBool) String() string {
+func (e *elemBool) String() string {
 	return e.Text()
 }
 

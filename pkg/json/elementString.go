@@ -18,7 +18,7 @@ func NewElemString(value string) ElemString {
 	return &elemString{value: value}
 }
 
-func (e elemString) String() string {
+func (e *elemString) String() string {
 	return "\"" + e.Text() + "\""
 }
 

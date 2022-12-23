@@ -15,7 +15,7 @@ func NewElemNull() ElemNull {
 	return &elemNull{}
 }
 
-func (e elemNull) String() string {
+func (e *elemNull) String() string {
 	return e.Text()
 }
 
