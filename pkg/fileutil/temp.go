@@ -15,7 +15,7 @@ func TempSpace(callback func(tempdir string) error) (err error) {
 	tempdir := filepath.Join(os.TempDir(), "tempspace_"+hex.EncodeToString(r))
 
 	// 一時領域を作成
-	err = os.MkdirAll(tempdir, 0600)
+	err = hook.Os.MkdirAll(tempdir, 0600)
 	if err != nil {
 		return err
 	}
