@@ -18,43 +18,45 @@ type TextLines interface {
 	SaveTo(string) error
 	// LoadFrom はファイルからテキストを読み込みます。
 	LoadFrom(string) error
+	// テスト用フック
+	HookForTest() *Hook
 }
 
 // 標準メソッドのテスト用モックのフックポイント
-type iScanner interface {
+type InterScanner interface {
 	Err() error
 	Scan() bool
 	Text() string
 }
 
-func ifuncNewScanner(r io.Reader) iScanner {
+func ifuncNewScanner(r io.Reader) InterScanner {
 	return bufio.NewScanner(r)
 }
 
-type hookBufio struct {
-	NewScanner func(r io.Reader) iScanner
+type HookBufio struct {
+	NewScanner func(r io.Reader) InterScanner
 }
 
-type iFile interface {
+type InterFile interface {
 	Close() error
 	WriteString(s string) (n int, err error)
 	Read(p []byte) (n int, err error)
 }
 
-func ifuncOpen(name string) (iFile, error) {
+func ifuncOpen(name string) (InterFile, error) {
 	return os.Open(name)
 }
-func ifuncCreate(name string) (iFile, error) {
+func ifuncCreate(name string) (InterFile, error) {
 	return os.Create(name)
 }
 
-type hookOs struct {
-	Open   func(name string) (iFile, error)
-	Create func(name string) (iFile, error)
+type HookOs struct {
+	Open   func(name string) (InterFile, error)
+	Create func(name string) (InterFile, error)
 }
-type hook struct {
-	bufio *hookBufio
-	os    *hookOs
+type Hook struct {
+	Bufio *HookBufio
+	Os    *HookOs
 }
 
 // textLines はテキストを格納します。
@@ -63,16 +65,16 @@ type textLines struct {
 	// 文字列スライス
 	lines []string
 	// フック
-	hook *hook
+	hook *Hook
 }
 
 // New は空のテキストを返します。
 func New() TextLines {
-	hook := &hook{
-		bufio: &hookBufio{
+	hook := &Hook{
+		Bufio: &HookBufio{
 			NewScanner: ifuncNewScanner,
 		},
-		os: &hookOs{
+		Os: &HookOs{
 			Open:   ifuncOpen,
 			Create: ifuncCreate,
 		},
@@ -88,13 +90,13 @@ func LoadFrom(filename string) (TextLines, error) {
 
 // LoadFrom はファイルからテキストを読み込みます。
 func (t *textLines) LoadFrom(filename string) error {
-	f, err := t.hook.os.Open(filename)
+	f, err := t.hook.Os.Open(filename)
 	if err != nil {
 		return fmt.Errorf("os.Open(%s) return %w", filename, err)
 	}
 	defer f.Close()
 
-	s := t.hook.bufio.NewScanner(f)
+	s := t.hook.Bufio.NewScanner(f)
 	for s.Scan() {
 		t.lines = append(t.lines, s.Text())
 	}
@@ -117,10 +119,7 @@ func (t *textLines) Append(line string) {
 
 // SaveTo はファイルにテキストを書き込みます。
 func (t *textLines) SaveTo(filename string) error {
-	if t == nil {
-		return fmt.Errorf("nil.SaveTo(%s)", filename)
-	}
-	f, err := t.hook.os.Create(filename)
+	f, err := t.hook.Os.Create(filename)
 	if err != nil {
 		return fmt.Errorf("os.Create(%s) return %w", filename, err)
 	}
@@ -133,4 +132,9 @@ func (t *textLines) SaveTo(filename string) error {
 		}
 	}
 	return nil
+}
+
+// Deprecated: should not be used for anything other than testing
+func (t *textLines) HookForTest() *Hook {
+	return t.hook
 }

@@ -68,4 +68,9 @@ func TestAll(t *testing.T) {
 			t.Fail()
 		}
 	}()
+
+	txt, err = text.LoadFrom("notexist-file")
+	if err == nil {
+		t.Fail()
+	}
 }
