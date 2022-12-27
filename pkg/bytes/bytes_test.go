@@ -18,8 +18,9 @@ func Test_clearBytes(t *testing.T) {
 		want []byte
 	}{
 		{name: "size zero", args: args{size: 0, init: 0}, want: []byte{}},
-		{name: "init zero", args: args{size: 1, init: 0}, want: []byte{0}},
-		{name: "init one", args: args{size: 2, init: 1}, want: []byte{1, 1}},
+		{name: "init one", args: args{size: 1, init: 1}, want: []byte{1}},
+		{name: "init two", args: args{size: 2, init: 2}, want: []byte{2, 2}},
+		{name: "init three", args: args{size: 3, init: 3}, want: []byte{3, 3, 3}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
