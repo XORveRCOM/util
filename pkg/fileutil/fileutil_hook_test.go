@@ -2,7 +2,9 @@ package fileutil_test
 
 import (
 	"errors"
+	"io"
 	"io/fs"
+	"os"
 	fpath "path/filepath"
 	"testing"
 
@@ -37,21 +39,38 @@ func TestHookOs(t *testing.T) {
 	}()
 
 	fileutil.TempSpace(func(tempdir string) error {
-		ie := hook.Os.ReadFile
-		defer func() {
-			hook.Os.ReadFile = ie
-		}()
-		hook.Os.ReadFile = func(name string) ([]byte, error) {
-			return nil, errors.New("ReadFile() error")
-		}
-
 		src := fpath.Join(tempdir, "src.txt")
 		dst := fpath.Join(tempdir, "dst.txt")
 		txt := text.New()
 		txt.SaveTo(src)
+
+		op := hook.Os.Open
+		hook.Os.Open = func(name string) (*os.File, error) {
+			return nil, errors.New("Open() error")
+		}
 		if err := fileutil.FileCopy(src, dst); err == nil {
 			t.Fail()
 		}
+		hook.Os.Open = op
+
+		cr := hook.Os.Create
+		hook.Os.Create = func(name string) (*os.File, error) {
+			return nil, errors.New("Open() error")
+		}
+		if err := fileutil.FileCopy(src, dst); err == nil {
+			t.Fail()
+		}
+		hook.Os.Create = cr
+
+		co := hook.Io.Copy
+		hook.Io.Copy = func(dst io.Writer, src io.Reader) (written int64, err error) {
+			return 0, errors.New("Open() error")
+		}
+		if err := fileutil.FileCopy(src, dst); err == nil {
+			t.Fail()
+		}
+		hook.Io.Copy = co
+
 		return nil
 	})
 

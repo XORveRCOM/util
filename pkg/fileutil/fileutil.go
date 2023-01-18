@@ -1,6 +1,7 @@
 package fileutil
 
 import (
+	"io"
 	"io/fs"
 	"os"
 	"sort"
@@ -15,9 +16,15 @@ type HookOs struct {
 	ReadDir   func(name string) ([]fs.DirEntry, error)
 	IsExist   func(err error) bool
 	MkdirAll  func(path string, perm fs.FileMode) error
+	Open      func(name string) (*os.File, error)
+	Create    func(name string) (*os.File, error)
+}
+type HookIo struct {
+	Copy func(dst io.Writer, src io.Reader) (written int64, err error)
 }
 type Hook struct {
 	Os *HookOs
+	Io *HookIo
 }
 
 var hook *Hook
@@ -33,6 +40,10 @@ func init() {
 	hook.Os.ReadDir = os.ReadDir
 	hook.Os.IsExist = os.IsExist
 	hook.Os.MkdirAll = os.MkdirAll
+	hook.Os.Open = os.Open
+	hook.Os.Create = os.Create
+	hook.Io = &HookIo{}
+	hook.Io.Copy = io.Copy
 }
 
 // Deprecated: should not be used for anything other than testing
@@ -47,13 +58,21 @@ func FileCopy(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	// 読み出し
-	b, err := hook.Os.ReadFile(src)
+	s, err := hook.Os.Open(src)
 	if err != nil {
 		return err
 	}
-	// 書き出し
-	return hook.Os.WriteFile(dst, b, 0644)
+	defer s.Close()
+	d, err := hook.Os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+	_, err = hook.Io.Copy(d, s)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // FileIfMove ファイルを移動 (移動元が無くても正常終了)
