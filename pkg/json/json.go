@@ -25,8 +25,8 @@ func SaveToJSONFile(filename string, elem Element, indentation bool) error {
 
 // ToJSON は Element を json 文字列に変換します。
 func ToJSON(elem Element, indentation bool) string {
-	b, _ := libjson.Marshal(elem.Value())
 	if indentation {
+		b, _ := libjson.Marshal(elem.Value())
 		var out bytes.Buffer
 		libjson.Indent(&out, b, "", "    ") // nolint
 		return out.String()
